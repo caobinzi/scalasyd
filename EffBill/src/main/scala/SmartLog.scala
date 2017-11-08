@@ -36,9 +36,9 @@ object EffBasicLogTimesApp extends App {
     for {
       billOption <- askBill
       bill       <- fromOption(billOption)
-      cats       <- Response(s"Your bill reference: ${bill}")
+      _          <- Response(s"Your bill reference: ${bill}")
       card       <- Request("Please type in your credit card info ")
-      cats       <- Response(s"Your credit card is : ${card}, we are processing now")
+      _          <- Response(s"Your credit card is : ${card}, we are processing now")
       reference  <- Purchase(bill, card)
       receipt    <- UpdateBill(bill, "Paid")
       _          <- Response(s"Your payment refrence is ${receipt}")
