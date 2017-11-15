@@ -1,4 +1,4 @@
-name := "EffLiftApp"
+name := "EffBillApp"
 
 scalaVersion := "2.12.0"
 
