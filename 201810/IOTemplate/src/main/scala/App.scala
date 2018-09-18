@@ -8,39 +8,31 @@ import cats.effect.IO
 
 object EffApp extends App {
 
-  import IvrOp._
-  import BillOp._
-  import BankOp._
+  import GdprOp._
+  import UserOp._
   import EffHelper._
   import IOHelper._
   import LogOp._
   import LogHelper._
 
-  def program[R: _ivrOp: _billOp: _bankOp: _logOp: _io]: Eff[R, Unit] = {
+  def program[R: _gdprOp: _userOp: _logOp: _io]: Eff[R, Unit] = {
     for {
-      bill        <- Request("Please type in your bill reference ")
-      _           <- Info("====haha===")
-      _           <- Response(s"Your bill reference: ${bill}")
-      card        <- Request("Please type in your credit card info ")
-      _           <- Response(s"Your credit card is : ${card}, we are processing now")
-      reference   <- Purchase(bill, card)
-      receiptTask <- UpdateBill(bill, "Paid")
-      checkTask   <- CheckBill(bill)
-      result      <- fromIO((receiptTask, checkTask).parMapN((_, _) => "haha"))
+      data   <- DeleteUserEmail("testuser@abcd.com")
+      _      <- Info(s"Found ${data.info}")
+      result <- SendUserData(data)
+      _      <- fromIO(result)
 
-      _ <- Response(s"Refrence ${result}")
     } yield ()
   }
 
-  type Stack = Fx.fx5[IvrOp, BillOp, BankOp, LogOp, IO]
+  type Stack = Fx.fx4[GdprOp, UserOp, LogOp, IO]
 
   val r = program[Stack]
-    .logTimes[IvrOp]
-    .logTimes[BillOp]
-    .runEffect(IvrIter.nt)
-    .runEffect(BankOp.nt)
+    .logTimes[GdprOp]
+    .logTimes[UserOp]
+    .runEffect(GdprIter.nt)
     .runEffect(LogOp.nt)
-    .runEffect(BillOp.ntTask)
+    .runEffect(UserOp.ntTask)
     .unsafeRunSync
 
   println("Getting here")
