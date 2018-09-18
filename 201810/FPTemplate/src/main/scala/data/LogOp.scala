@@ -17,11 +17,4 @@ object LogOp {
 
   type _logOp[R] = LogOp |= R
 
-  val nt = new (LogOp ~> Id) {
-
-    def apply[A](fa: LogOp[A]): Id[A] =
-      fa match {
-        case Info(s) => println(s)
-      }
-  }
 }

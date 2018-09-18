@@ -30,8 +30,8 @@ object MyApp extends App {
     .logTimes[GdprOp]
     .logTimes[UserOp]
     .runEffect(GdprIter.nt)
-    .runEffect(LogOp.nt)
-    .runEffect(UserOp.ntTask)
+    .runEffect(LogIter.nt)
+    .runEffect(UserIter.nt)
     .unsafeRunSync
 
   println("Getting here")
