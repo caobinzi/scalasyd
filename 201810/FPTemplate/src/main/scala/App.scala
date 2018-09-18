@@ -6,7 +6,7 @@ import org.atnos.eff.syntax.addon.cats.effect._
 import cats.implicits._
 import cats.effect.IO
 
-object EffApp extends App {
+object MyApp extends App {
 
   import GdprOp._
   import UserOp._
@@ -21,7 +21,6 @@ object EffApp extends App {
       _      <- Info(s"Found ${data.info}")
       result <- SendUserData(data)
       _      <- fromIO(result)
-
     } yield ()
   }
 
