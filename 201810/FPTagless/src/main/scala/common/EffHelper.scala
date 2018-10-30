@@ -9,8 +9,8 @@ import org.atnos.eff.addon.cats.effect.IOEffect._
 import org.atnos.eff.syntax.addon.cats.effect._
 
 object EffHelper {
+
   implicit def liftEff[A, F[_], R: F |= ?](s: F[A]): Eff[R, A] = {
     Eff.send[F, R, A](s)
   }
-
 }

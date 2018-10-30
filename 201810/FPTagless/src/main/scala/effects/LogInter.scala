@@ -9,7 +9,9 @@ object LogIter {
 
     def apply[A](fa: LogOp[A]): Id[A] =
       fa match {
-        case Info(s) => println(s)
+        case Info(s)  => println(s)
+        case Warn(s)  => println(s)
+        case Debug(s) => println(s)
       }
   }
 

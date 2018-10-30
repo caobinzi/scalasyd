@@ -14,11 +14,13 @@ object MyApp extends App {
   import scala.concurrent.Future
   import scala.concurrent.ExecutionContext.Implicits.global
 
+  import LogOp._
+
   def program[
       F1[_]: Monad,
       F2[_]: Monad,
       F3[_]: Monad,
-      R:     _Option: MemberIn[F1, ?]: MemberIn[F2, ?]: MemberIn[F3, ?]
+      R:     _logOp: _Option: MemberIn[F1, ?]: MemberIn[F2, ?]: MemberIn[F3, ?]
   ](
       gdpr: GdprOp[F1],
       user: UserOp[F2],
@@ -32,16 +34,18 @@ object MyApp extends App {
       _      <- log.println(s"Found ${data.info}")
       result <- user.sendUserData(data)
       _      <- log.println(s"Finished Delete")
+      _      <- Warn(s"ok")
     } yield ()
   }
 
-  type Stack = Fx.fx3[IO, Eval, Option]
+  type Stack = Fx.fx4[IO, Eval, Option, LogOp]
+  import IdHelper._
 
   program[IO, Eval, Eval, Stack](
     GdprIter,
     UserIter,
     ConsoleIter
-  ).runEval.runOption.unsafeRunSync
+  ).runEffect(LogIter.nt).runEval.runOption.unsafeRunSync
 
   println("Getting here")
 
