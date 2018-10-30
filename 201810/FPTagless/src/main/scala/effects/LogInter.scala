@@ -2,13 +2,15 @@ import cats._
 import data._
 import org.atnos.eff._
 import cats.implicits._
-import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
-import scala.concurrent._
 
-object ConsoleIter extends ConsoleOp[Eval] {
-  import scala.concurrent.ExecutionContext.Implicits.global
+object LogIter {
 
-  override def println(s: String) = Eval.later(println(s))
+  val nt = new (LogOp ~> Id) {
+
+    def apply[A](fa: LogOp[A]): Id[A] =
+      fa match {
+        case Info(s) => println(s)
+      }
+  }
 
 }
