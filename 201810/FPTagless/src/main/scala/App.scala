@@ -18,14 +18,13 @@ object MyApp extends App {
       F1[_]: Monad,
       F2[_]: Monad,
       F3[_]: Monad,
-      R:     _Option
+      R:     _Option: MemberIn[F1, ?]: MemberIn[F2, ?]: MemberIn[F3, ?]
   ](
-      gdpr:     GdprOp[F1],
-      user:     UserOp[F2],
-      log:      LogOp[F3]
-  )(implicit c: F1 |= R, q: F2 |= R, k: F3 |= R): Eff[R, Unit] = {
+      gdpr: GdprOp[F1],
+      user: UserOp[F2],
+      log:  LogOp[F3]
+  ): Eff[R, Unit] = {
     import EffHelper._
-
     for {
 
       a      <- fromOption(Some("test"))
@@ -38,20 +37,12 @@ object MyApp extends App {
 
   type Stack = Fx.fx3[IO, Eval, Option]
 
-  {
-    import cats.implicits._
-
-    program[IO, Eval, Eval, Stack](
-      GdprIter,
-      UserIter,
-      LogIter
-    ).runEval.runOption.unsafeRunSync
-//    Await.result(result.runSequential, 1 second)
-  }
+  program[IO, Eval, Eval, Stack](
+    GdprIter,
+    UserIter,
+    LogIter
+  ).runEval.runOption.unsafeRunSync
 
   println("Getting here")
-//  Thread.sleep(1000000)
-
-  //   .runFuture
 
 }
