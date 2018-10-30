@@ -7,10 +7,9 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.concurrent._
 
-object UserIter extends UserOp[Future] {
-  import scala.concurrent.ExecutionContext.Implicits.global
+object UserIter extends UserOp[Eval] {
 
-  override def sendUserData(data: UserData) = Future {
+  override def sendUserData(data: UserData) = Eval.later {
     Thread.sleep(10000)
     println(s"Updating Data now:${data}")
     true
