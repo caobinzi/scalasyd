@@ -22,16 +22,16 @@ object MyApp extends App {
   ](
       gdpr: GdprOp[F1],
       user: UserOp[F2],
-      log:  LogOp[F3]
+      log:  ConsoleOp[F3]
   ): Eff[R, Unit] = {
     import EffHelper._
     for {
 
       a      <- fromOption(Some("test"))
       data   <- gdpr.deleteUserEmail("testuser@abcd.com")
-      _      <- log.info(s"Found ${data.info}")
+      _      <- log.println(s"Found ${data.info}")
       result <- user.sendUserData(data)
-      _      <- log.info(s"Finished Delete")
+      _      <- log.println(s"Finished Delete")
     } yield ()
   }
 
@@ -40,7 +40,7 @@ object MyApp extends App {
   program[IO, Eval, Eval, Stack](
     GdprIter,
     UserIter,
-    LogIter
+    ConsoleIter
   ).runEval.runOption.unsafeRunSync
 
   println("Getting here")
