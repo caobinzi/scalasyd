@@ -14,11 +14,16 @@ object MyApp extends App {
   import scala.concurrent.Future
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  def program[F1[_]: Monad, F[_]: Monad, R](
+  def program[
+      F1[_]: Monad,
+      F2[_]: Monad,
+      F3[_]: Monad,
+      R
+  ](
       gdpr:     GdprOp[F1],
-      user:     UserOp[F],
-      log:      LogOp[F]
-  )(implicit c: F |= R, q: F1 |= R): Eff[R, Unit] = {
+      user:     UserOp[F2],
+      log:      LogOp[F3]
+  )(implicit c: F1 |= R, q: F2 |= R, k: F3 |= R): Eff[R, Unit] = {
     import EffHelper._
 
     for {
@@ -28,12 +33,13 @@ object MyApp extends App {
       _      <- log.info(s"Finished Delete")
     } yield ()
   }
+
   type Stack = Fx.fx2[IO, Eval]
 
   {
     import cats.implicits._
 
-    program[IO, Eval, Stack](
+    program[IO, Eval, Eval, Stack](
       GdprIter,
       UserIter,
       LogIter
