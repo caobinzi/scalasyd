@@ -10,7 +10,8 @@ import scala.concurrent._
 object UserIter extends UserOp[Eval] {
 
   override def sendUserData(data: UserData) = Eval.later {
-    Thread.sleep(10000)
+    println(s"Sleep 3 seconds")
+    Thread.sleep(3000)
     println(s"Updating Data now:${data}")
     true
   }

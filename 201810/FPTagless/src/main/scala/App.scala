@@ -18,7 +18,7 @@ object MyApp extends App {
       F1[_]: Monad,
       F2[_]: Monad,
       F3[_]: Monad,
-      R
+      R:     _Option
   ](
       gdpr:     GdprOp[F1],
       user:     UserOp[F2],
@@ -27,6 +27,8 @@ object MyApp extends App {
     import EffHelper._
 
     for {
+
+      a      <- fromOption(Some("test"))
       data   <- gdpr.deleteUserEmail("testuser@abcd.com")
       _      <- log.info(s"Found ${data.info}")
       result <- user.sendUserData(data)
@@ -34,7 +36,7 @@ object MyApp extends App {
     } yield ()
   }
 
-  type Stack = Fx.fx2[IO, Eval]
+  type Stack = Fx.fx3[IO, Eval, Option]
 
   {
     import cats.implicits._
@@ -43,7 +45,7 @@ object MyApp extends App {
       GdprIter,
       UserIter,
       LogIter
-    ).runEval.unsafeRunSync
+    ).runEval.runOption.unsafeRunSync
 //    Await.result(result.runSequential, 1 second)
   }
 
