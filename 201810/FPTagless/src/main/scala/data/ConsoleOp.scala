@@ -1,4 +1,4 @@
 trait ConsoleOp[F[_]] {
-  def println(s: String): F[Unit]
+  def printStrLn(s: String): F[Unit]
 
 }

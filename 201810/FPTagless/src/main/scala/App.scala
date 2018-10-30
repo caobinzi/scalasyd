@@ -17,23 +17,23 @@ object MyApp extends App {
   import LogOp._
 
   def program[
-      F1[_]: Monad,
-      F2[_]: Monad,
-      F3[_]: Monad,
+      F1[_]: FlatMap,
+      F2[_]: FlatMap,
+      F3[_]: FlatMap,
       R:     _logOp: _Option: MemberIn[F1, ?]: MemberIn[F2, ?]: MemberIn[F3, ?]
   ](
-      gdpr: GdprOp[F1],
-      user: UserOp[F2],
-      log:  ConsoleOp[F3]
+      gdpr:    GdprOp[F1],
+      user:    UserOp[F2],
+      console: ConsoleOp[F3]
   ): Eff[R, Unit] = {
     import EffHelper._
     for {
 
       a      <- fromOption(Some("test"))
       data   <- gdpr.deleteUserEmail("testuser@abcd.com")
-      _      <- log.println(s"Found ${data.info}")
+      _      <- console.printStrLn(s"Found ${data.info}")
       result <- user.sendUserData(data)
-      _      <- log.println(s"Finished Delete")
+      _      <- console.printStrLn(s"Finished Delete")
       _      <- Warn(s"ok")
     } yield ()
   }
@@ -46,7 +46,5 @@ object MyApp extends App {
     UserIter,
     ConsoleIter
   ).runEffect(LogIter.nt).runEval.runOption.unsafeRunSync
-
-  println("Getting here")
 
 }
