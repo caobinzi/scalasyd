@@ -21,6 +21,7 @@ object MyApp extends App {
       _      <- Info(s"Found ${data.info}")
       result <- SendUserData(data)
       _      <- fromIO(result)
+      _      <- Info(s"Finished Delete")
     } yield ()
   }
 

@@ -11,7 +11,7 @@ object UserIter {
   import scala.concurrent.ExecutionContext.Implicits.global
 
   def uploadUser(data: UserData) = Future {
-    Thread.sleep(1000)
+    Thread.sleep(10000)
     println(s"Updating Data now:${data}")
     true
   }
