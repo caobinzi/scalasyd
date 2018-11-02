@@ -6,7 +6,7 @@ import cats.effect._
 
 object LogIter {
 
-  val nt = new (LogOp ~> IO) {
+  val ioNt = new (LogOp ~> IO) {
 
     def apply[A](fa: LogOp[A]): IO[A] =
       fa match {

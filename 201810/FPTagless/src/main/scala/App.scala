@@ -37,6 +37,6 @@ object MyApp extends App {
     GdprIter,
     UserIter,
     ConsoleIter
-  ).runEval.runOption.runIO(LogIter.nt).unsafeRunSync
+  ).runEval.runOption.runIO(LogIter.ioNt).unsafeRunSync
 
 }
