@@ -25,18 +25,4 @@ object IOHelper {
 
   }
 
-  implicit class FutureHelperp[A](job: Future[A]) {
-
-    def runFuture: A = {
-      import scala.util._
-      Await.ready(job, Duration.Inf).value.get match {
-        case Success(l) =>
-          l
-        case Failure(e) =>
-          println(s"Erro found: ${e}")
-          throw e
-      }
-    }
-  }
-
 }
