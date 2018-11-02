@@ -1,14 +1,12 @@
 import org.atnos.eff._
 import org.atnos.eff.all._
 import org.atnos.eff.syntax.all._
-import org.atnos.eff.addon.cats.effect.IOEffect._
 import org.atnos.eff.syntax.addon.cats.effect._
 
 import cats._
-import cats.data._
 import cats.effect.IO
 
-import cats.instances._
+import EffHelper._
 
 object MyApp extends App {
 
@@ -22,7 +20,6 @@ object MyApp extends App {
       user:    UserOp[F2],
       console: ConsoleOp[F3]
   ): Eff[R, Unit] = {
-    import EffHelper._
     for {
 
       a      <- fromOption(Some("test"))
@@ -35,7 +32,6 @@ object MyApp extends App {
   }
 
   type Stack = Fx.fx4[IO, Eval, Option, LogOp]
-  import IOHelper._
 
   program[IO, Eval, Eval, Stack](
     GdprIter,

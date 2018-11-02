@@ -13,4 +13,19 @@ object EffHelper {
   implicit def liftEff[A, F[_], R: F |= ?](s: F[A]): Eff[R, A] = {
     Eff.send[F, R, A](s)
   }
+
+  implicit class SideEffectHelper[F[_], G[_], R, A, U](effects: Eff[R, A]) {
+
+    def runIO(haha: F ~> G)(
+        implicit m: Member.Aux[F, R, U],
+        io:         MemberIn[G, U]
+    ): Eff[U, A] = {
+      translate(effects)(new Translate[F, U] {
+        def apply[X](ax: F[X]): Eff[U, X] =
+          Eff.send(haha(ax))
+      })
+    }
+
+  }
+
 }

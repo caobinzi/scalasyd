@@ -15,7 +15,6 @@ object LogHelper {
         log:     MemberIn[LogOp, R]
     ): Eff[R, A] =
       LogHelper.logTimes[R, T, A](e)
-
   }
 
   def logTimes[R, T[_], A](eff: Eff[R, A])(
@@ -23,7 +22,6 @@ object LogHelper {
       memberT: MemberInOut[T, R],
       eval:    MemberIn[LogOp, R]
   ): Eff[R, A] = {
-
     translateInto(eff)(new Translate[T, R] {
       def apply[X](tx: T[X]): Eff[R, X] =
         (for {
@@ -32,9 +30,7 @@ object LogHelper {
           _ <- send(Info(s"${new java.util.Date} << $tx end"))
 
         } yield x)
-
     })
-
   }
 
 }
