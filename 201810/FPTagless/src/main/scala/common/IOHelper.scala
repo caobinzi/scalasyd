@@ -1,29 +1,30 @@
 import cats._
 import data._
+import cats.effect._
 import org.atnos.eff._
 import cats.implicits._
 import org.atnos.eff._, interpret._
 import scala.concurrent._
 import scala.concurrent.duration.Duration
 import scala.concurrent.ExecutionContext.Implicits.global
+import org.atnos.eff.addon.cats.effect.IOEffect._
 
 object IOHelper {
 
-  implicit class SideEffectHelper[T[_], R, A, U](effects: Eff[R, A]) {
+  implicit class SideEffectHelper[F[_], R, A, U](effects: Eff[R, A]) {
 
-    def runEffect(haha: T ~> Id)(
-        implicit m:     Member.Aux[T, R, U]
+    def runIO(haha: F ~> IO)(
+        implicit m: Member.Aux[F, R, U],
+        io:         MemberIn[IO, U]
     ): Eff[U, A] = {
-      val sideEffect = new SideEffect[T] {
-        def apply[X](fsc: T[X]): X = haha(fsc)
-
-        def applicative[X, Tr[_]: Traverse](ms: Tr[T[X]]): Tr[X] =
-          ms.map(apply)
-      }
-      Interpret.interpretUnsafe(effects)(sideEffect)(m)
+      translate(effects)(new Translate[F, U] {
+        def apply[X](ax: F[X]): Eff[U, X] =
+          fromIO(haha(ax))
+      })
     }
 
   }
+
   implicit class FutureHelperp[A](job: Future[A]) {
 
     def runFuture: A = {

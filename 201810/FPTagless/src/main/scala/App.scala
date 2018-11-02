@@ -11,16 +11,12 @@ import cats.effect.IO
 import cats.instances._
 
 object MyApp extends App {
-  import scala.concurrent.Future
-  import scala.concurrent.ExecutionContext.Implicits.global
-
-  import LogOp._
 
   def program[
       F1[_]: FlatMap,
       F2[_]: FlatMap,
       F3[_]: FlatMap,
-      R:     _logOp: _Option: MemberIn[F1, ?]: MemberIn[F2, ?]: MemberIn[F3, ?]
+      R:     MemberIn[LogOp, ?]: MemberIn[Option, ?]: MemberIn[F1, ?]: MemberIn[F2, ?]: MemberIn[F3, ?]
   ](
       gdpr:    GdprOp[F1],
       user:    UserOp[F2],
@@ -39,12 +35,12 @@ object MyApp extends App {
   }
 
   type Stack = Fx.fx4[IO, Eval, Option, LogOp]
-  import IdHelper._
+  import IOHelper._
 
   program[IO, Eval, Eval, Stack](
     GdprIter,
     UserIter,
     ConsoleIter
-  ).runEffect(LogIter.nt).runEval.runOption.unsafeRunSync
+  ).runEval.runOption.runIO(LogIter.nt).unsafeRunSync
 
 }
