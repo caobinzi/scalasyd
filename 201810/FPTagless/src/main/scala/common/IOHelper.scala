@@ -11,15 +11,15 @@ import org.atnos.eff.addon.cats.effect.IOEffect._
 
 object IOHelper {
 
-  implicit class SideEffectHelper[F[_], R, A, U](effects: Eff[R, A]) {
+  implicit class SideEffectHelper[F[_], G[_], R, A, U](effects: Eff[R, A]) {
 
-    def runIO(haha: F ~> IO)(
+    def runIO(haha: F ~> G)(
         implicit m: Member.Aux[F, R, U],
-        io:         MemberIn[IO, U]
+        io:         MemberIn[G, U]
     ): Eff[U, A] = {
       translate(effects)(new Translate[F, U] {
         def apply[X](ax: F[X]): Eff[U, X] =
-          fromIO(haha(ax))
+          Eff.send(haha(ax))
       })
     }
 
