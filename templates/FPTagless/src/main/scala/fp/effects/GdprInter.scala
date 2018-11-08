@@ -1,9 +1,11 @@
+package fp.effects
 import cats._
 import data._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.concurrent._
 import cats.effect.IO
+import fp.data._
 
 import cats._, cats.data._, cats.syntax.all._, cats.effect.IO
 

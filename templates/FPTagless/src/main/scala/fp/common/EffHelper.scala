@@ -1,3 +1,4 @@
+package fp.common
 import cats._
 import data._
 import org.atnos.eff._

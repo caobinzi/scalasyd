@@ -1,8 +1,10 @@
+package fp.effects
 import cats._
 import data._
 import org.atnos.eff._
 import cats.implicits._
 import cats.effect._
+import fp.data._
 
 object LogIter {
 

@@ -1,7 +1,12 @@
+package fp
 import org.atnos.eff._
 import org.atnos.eff.all._
 import org.atnos.eff.syntax.all._
 import org.atnos.eff.syntax.addon.cats.effect._
+
+import fp.common._
+import fp.effects._
+import fp.data._
 
 import cats._
 import cats.effect.IO

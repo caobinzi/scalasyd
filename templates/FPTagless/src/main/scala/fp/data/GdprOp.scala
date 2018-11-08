@@ -1,3 +1,4 @@
+package fp.data
 case class UserData(id: Int, data: String)
 
 trait GdprOp[F[_]] {

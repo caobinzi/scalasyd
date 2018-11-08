@@ -1,3 +1,4 @@
+package fp.data
 import scala.language.higherKinds
 import scala.language.implicitConversions
 import cats._

@@ -1,3 +1,4 @@
+package fp.effects
 import cats._
 import data._
 import org.atnos.eff._
@@ -6,6 +7,7 @@ import cats.effect.IO
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.concurrent._
+import fp.data._
 
 object UserIter extends UserOp[Eval] {
 
