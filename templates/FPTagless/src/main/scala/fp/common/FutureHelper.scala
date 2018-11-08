@@ -1,14 +1,7 @@
 package fp.common
-import cats._
-import data._
-import cats.effect._
-import org.atnos.eff._
-import cats.implicits._
-import org.atnos.eff._, interpret._
 import scala.concurrent._
 import scala.concurrent.duration.Duration
 import scala.concurrent.ExecutionContext.Implicits.global
-import org.atnos.eff.addon.cats.effect.IOEffect._
 
 object FutureHelper {
 
