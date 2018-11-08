@@ -21,7 +21,6 @@ object MyApp extends App {
       console: ConsoleOp[F3]
   ): Eff[R, Unit] = {
     for {
-
       a      <- fromOption(Some("test"))
       email  <- gdpr.retrieveUserEmail(1)
       info   <- gdpr.deleteUser(1)
@@ -38,6 +37,6 @@ object MyApp extends App {
     GdprIter,
     UserIter,
     ConsoleIter
-  ).runEval.runOption.runIO(LogIter.ioNt).unsafeRunSync
+  ).runEval.runOption.runEffect(LogIter.ioNt).unsafeRunSync
 
 }
