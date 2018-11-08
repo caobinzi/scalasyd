@@ -1,6 +1,5 @@
 package fp.effects
-import cats._
-import data._
+import cats.Eval
 import fp.data.ConsoleOp
 
 object ConsoleIter extends ConsoleOp[Eval] {
