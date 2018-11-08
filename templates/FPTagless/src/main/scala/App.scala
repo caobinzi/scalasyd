@@ -23,9 +23,10 @@ object MyApp extends App {
     for {
 
       a      <- fromOption(Some("test"))
-      data   <- gdpr.deleteUserEmail("testuser@abcd.com")
-      _      <- console.printStrLn(s"Found ${data.info}")
-      result <- user.sendUserData(data)
+      email  <- gdpr.retrieveUserEmail(1)
+      info   <- gdpr.deleteUser(1)
+      _      <- console.printStrLn(s"Found ${info.data}")
+      result <- user.sendUserData(email, info)
       _      <- console.printStrLn(s"Finished Delete")
       _      <- Warn(s"ok")
     } yield ()
