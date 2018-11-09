@@ -2,17 +2,15 @@ package fp.effects
 
 import scala.concurrent._
 import cats.effect.IO
-
 import cats.data.NonEmptyList
 import cats.syntax.all._
-
 import fp.data._
 
 object GdprIter extends GdprOp[IO] {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  override def deleteUser(id: Int) =
+  override def deleteUser(id: Int): IO[UserData] =
     for {
       info <- retrieveUser(id)
       _    <- NonEmptyList.of(deleteUserEmail(id), deleteUserAddress(id)).parSequence

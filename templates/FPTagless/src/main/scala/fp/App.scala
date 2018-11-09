@@ -17,9 +17,9 @@ import EffHelper._
 object MyApp extends App {
 
   def program[
-      F1[_]: FlatMap,
-      F2[_]: FlatMap,
-      F3[_]: FlatMap,
+      F1[_]: FlatMap, //Tagless effect 1
+      F2[_]: FlatMap, //Tagless effect 2
+      F3[_]: FlatMap, //Tagless effect 3
       R:     MemberIn[LogOp, ?]: MemberIn[Option, ?]: MemberIn[F1, ?]: MemberIn[F2, ?]: MemberIn[F3, ?]
   ](
       gdpr:    GdprOp[F1],
@@ -33,16 +33,20 @@ object MyApp extends App {
       _      <- console.printStrLn(s"Found ${info.data}")
       result <- user.sendUserData(email, info)
       _      <- console.printStrLn(s"Finished Delete")
-      _      <- Warn(s"ok")
+      _      <- Warn(s"ok") //This one is for customized effect
     } yield ()
   }
 
   type Stack = Fx.fx4[IO, Eval, Option, LogOp]
 
-  program[IO, Eval, Eval, Stack](
+  val app = program[IO, Eval, Eval, Stack](
     GdprIter,
     UserIter,
     ConsoleIter
-  ).runEval.runOption.runEffect(LogIter.ioNt).unsafeRunSync
+  )
+
+  app.runEval.runOption
+    .runEffect(LogIter.ioNt)
+    .unsafeRunSync
 
 }

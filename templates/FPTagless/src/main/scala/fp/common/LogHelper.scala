@@ -18,7 +18,7 @@ object LogHelper {
   def logTimes[R, T[_], A](eff: Eff[R, A])(
       implicit
       memberT: MemberInOut[T, R],
-      eval:    MemberIn[LogOp, R]
+      log:     MemberIn[LogOp, R]
   ): Eff[R, A] = {
     translateInto(eff)(new Translate[T, R] {
       def apply[X](tx: T[X]): Eff[R, X] =
