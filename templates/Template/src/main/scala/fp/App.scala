@@ -35,27 +35,22 @@ object MyApp extends App {
   }
 
   def testProgram = {
+    //Needs a fix
     type Stack = Fx.fx6[Eval, IO, LogOp, GdprOp, UserOp, ConsoleOp]
-
     val app = program[Stack]
-
     app
-      .logTimes[GdprOp]
-      .runEffect(LogIter.idNt)
-      .runEval
-      .runEffect(ConsoleIter.ioNt)
+      .runEffect(LogIter.evalNt)
       .runEffect(GdprIter.ioNt)
       .runEffect(UserIter.ioNt)
+      .runEffect(ConsoleIter.evalNt)
+      .runEval
+      .run
       .unsafeRunSync
-
   }
 
   def runProgram = {
-
     type Stack = Fx.fx5[IO, LogOp, GdprOp, UserOp, ConsoleOp]
-
     val app = program[Stack]
-
     app
       .logTimes[GdprOp]
       .runEffect(LogIter.ioNt)
@@ -63,7 +58,6 @@ object MyApp extends App {
       .runEffect(GdprIter.ioNt)
       .runEffect(UserIter.ioNt)
       .unsafeRunSync
-
   }
   runProgram
 }

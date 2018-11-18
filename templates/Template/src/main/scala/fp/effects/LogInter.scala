@@ -17,7 +17,7 @@ object LogIter {
       }
   }
 
-  val idNt = new (LogOp ~> Eval) {
+  val evalNt = new (LogOp ~> Eval) {
 
     def apply[A](fa: LogOp[A]): Eval[A] =
       fa match {

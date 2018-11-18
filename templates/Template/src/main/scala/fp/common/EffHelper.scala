@@ -11,7 +11,9 @@ object EffHelper {
     Eff.send[F, R, A](s)
   }
 
-  implicit class EffectHelper[F[_], G[_], R, A, U](effects: Eff[R, A]) {
+  implicit class EffectHelper[F[_], G[_], R, A, U](
+      effects: Eff[R, A]
+  ) {
 
     def runEffect(nt: F ~> G)(
         implicit m:   Member.Aux[F, R, U],
@@ -22,7 +24,6 @@ object EffHelper {
           Eff.send(nt(ax))
       })
     }
-
   }
 
 }

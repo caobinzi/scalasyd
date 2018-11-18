@@ -17,4 +17,12 @@ object ConsoleIter {
       }
   }
 
+  val evalNt = new (ConsoleOp ~> Eval) {
+
+    def apply[A](fa: ConsoleOp[A]): Eval[A] =
+      fa match {
+        case PrintStrLn(s) => Eval.now(println(s))
+      }
+  }
+
 }
