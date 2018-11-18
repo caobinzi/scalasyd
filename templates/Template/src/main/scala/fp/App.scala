@@ -16,9 +16,14 @@ import EffHelper._
 
 object MyApp extends App {
   import LogHelper._
+  import LogOp._
+  import UserOp._
+  import ConsoleOp._
+  import GdprOp._
 
   def program[
-      R: MemberIn[LogOp, ?]: MemberIn[Gdpr, ?]: MemberIn[UserOp, ?]: MemberIn[ConsoleOp, ?]
+      //R: MemberIn[LogOp, ?]: MemberIn[GdprOp, ?]: MemberIn[UserOp, ?]: MemberIn[ConsoleOp, ?]
+      R: _logOp: _gdprOp: _userOp: _consoleOp
   ]: Eff[R, Unit] = {
     for {
       email  <- RetrieveUserEmail(1)
@@ -30,12 +35,12 @@ object MyApp extends App {
     } yield ()
   }
 
-  type Stack = Fx.fx5[IO, LogOp, Gdpr, UserOp, ConsoleOp]
+  type Stack = Fx.fx5[IO, LogOp, GdprOp, UserOp, ConsoleOp]
 
   val app = program[Stack]
 
   app
-    .logTimes[Gdpr]
+    .logTimes[GdprOp]
     .runEffect(LogIter.ioNt)
     .runEffect(GdprIter.ioNt)
     .runEffect(ConsoleIter.ioNt)

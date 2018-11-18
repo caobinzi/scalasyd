@@ -7,14 +7,14 @@ import cats.syntax.all._
 import fp.data._
 import cats._
 
-object GdprIter extends GdprOp[IO] {
+object GdprIter {
 
   import scala.concurrent.ExecutionContext.Implicits.global
   import fp.common.IOHelper._
 
-  override val ioNt = new (Gdpr ~> IO) {
+  val ioNt = new (GdprOp ~> IO) {
 
-    def apply[A](fa: Gdpr[A]): IO[A] =
+    def apply[A](fa: GdprOp[A]): IO[A] =
       fa match {
         case DeleteUser(id)        => deleteUser(id)
         case RetrieveUser(id)      => retrieveUser(id)
