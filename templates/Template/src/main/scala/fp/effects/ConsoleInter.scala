@@ -1,9 +1,20 @@
 package fp.effects
 import cats.Eval
-import fp.data.ConsoleOp
+import fp.data._
+import cats.effect.IO
+import cats.syntax.all._
+import cats._
 
-object ConsoleIter extends ConsoleOp[Eval] {
+object ConsoleIter {
 
-  override def printStrLn(s: String) = Eval.now(println(s))
+  def printStrLn(s: String) = println(s)
+
+  val ioNt = new (ConsoleOp ~> IO) {
+
+    def apply[A](fa: ConsoleOp[A]): IO[A] =
+      fa match {
+        case PrintStrLn(s) => IO(println(s))
+      }
+  }
 
 }

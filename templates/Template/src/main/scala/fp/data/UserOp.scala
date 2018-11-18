@@ -1,5 +1,4 @@
 package fp.data
 
-trait UserOp[F[_]] {
-  def sendUserData(email: String, data: UserData): F[Boolean]
-}
+trait UserOp[F]
+case class SendUserData(email: String, data: UserData) extends UserOp[Boolean]

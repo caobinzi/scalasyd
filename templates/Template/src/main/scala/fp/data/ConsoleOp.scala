@@ -1,5 +1,5 @@
 package fp.data
 
-trait ConsoleOp[F[_]] {
-  def printStrLn(s: String): F[Unit]
-}
+trait ConsoleOp[F]
+
+case class PrintStrLn(s: String) extends ConsoleOp[Unit]
