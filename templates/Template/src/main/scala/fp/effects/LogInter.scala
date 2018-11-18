@@ -17,4 +17,17 @@ object LogIter {
       }
   }
 
+  val idNt = new (LogOp ~> Eval) {
+
+    def apply[A](fa: LogOp[A]): Eval[A] =
+      fa match {
+        case Info(s)  => Eval.now(println(s"TEST_INFO: ${s}"))
+        case Warn(s)  => Eval.now(println(s"TEST_WARN: ${s}"))
+        case Debug(s) => Eval.now(println(s"TEST_DEBUG: ${s}"))
+        case Error(s) => Eval.now(println(s"TEST_ERROR: ${s}"))
+
+      }
+
+  }
+
 }

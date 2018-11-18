@@ -22,7 +22,6 @@ object MyApp extends App {
   import GdprOp._
 
   def program[
-      //R: MemberIn[LogOp, ?]: MemberIn[GdprOp, ?]: MemberIn[UserOp, ?]: MemberIn[ConsoleOp, ?]
       R: _logOp: _gdprOp: _userOp: _consoleOp
   ]: Eff[R, Unit] = {
     for {
@@ -35,16 +34,36 @@ object MyApp extends App {
     } yield ()
   }
 
-  type Stack = Fx.fx5[IO, LogOp, GdprOp, UserOp, ConsoleOp]
+  def testProgram = {
+    type Stack = Fx.fx6[Eval, IO, LogOp, GdprOp, UserOp, ConsoleOp]
 
-  val app = program[Stack]
+    val app = program[Stack]
 
-  app
-    .logTimes[GdprOp]
-    .runEffect(LogIter.ioNt)
-    .runEffect(GdprIter.ioNt)
-    .runEffect(ConsoleIter.ioNt)
-    .runEffect(UserIter.ioNt)
-    .unsafeRunSync
+    app
+      .logTimes[GdprOp]
+      .runEffect(LogIter.idNt)
+      .runEval
+      .runEffect(ConsoleIter.ioNt)
+      .runEffect(GdprIter.ioNt)
+      .runEffect(UserIter.ioNt)
+      .unsafeRunSync
 
+  }
+
+  def runProgram = {
+
+    type Stack = Fx.fx5[IO, LogOp, GdprOp, UserOp, ConsoleOp]
+
+    val app = program[Stack]
+
+    app
+      .logTimes[GdprOp]
+      .runEffect(LogIter.ioNt)
+      .runEffect(ConsoleIter.ioNt)
+      .runEffect(GdprIter.ioNt)
+      .runEffect(UserIter.ioNt)
+      .unsafeRunSync
+
+  }
+  runProgram
 }
