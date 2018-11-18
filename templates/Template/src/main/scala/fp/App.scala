@@ -15,6 +15,7 @@ import cats.effect.IO
 import EffHelper._
 
 object MyApp extends App {
+  import LogHelper._
 
   def program[
       R: MemberIn[LogOp, ?]: MemberIn[Gdpr, ?]: MemberIn[UserOp, ?]: MemberIn[ConsoleOp, ?]
@@ -34,6 +35,7 @@ object MyApp extends App {
   val app = program[Stack]
 
   app
+    .logTimes[Gdpr]
     .runEffect(LogIter.ioNt)
     .runEffect(GdprIter.ioNt)
     .runEffect(ConsoleIter.ioNt)

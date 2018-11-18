@@ -1,6 +1,7 @@
 package fp.data
 import cats._
 case class UserData(id: Int, data: String)
+
 trait Gdpr[A]
 case class DeleteUser(id: Int) extends Gdpr[UserData]
 
