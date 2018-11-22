@@ -13,6 +13,7 @@ import cats._
 import cats.effect.IO
 
 import EffHelper._
+import Eff._
 
 object MyApp extends App {
   import LogHelper._
@@ -37,15 +38,20 @@ object MyApp extends App {
   def testProgram = {
     //Needs a fix
     type Stack = Fx.fx6[Eval, IO, LogOp, GdprOp, UserOp, ConsoleOp]
-    val app = program[Stack]
-    app
-      .runEffect(LogIter.evalNt)
-      .runEffect(GdprIter.ioNt)
-      .runEffect(UserIter.ioNt)
-      .runEffect(ConsoleIter.evalNt)
-      .runEval
-      .run
-      .unsafeRunSync
+
+    val app =
+      program[Stack]
+        .runEffect(LogIter.evalNt)
+        .runEffect(ConsoleIter.evalNt)
+        .runEval
+        .runEffect(GdprIter.ioNt)
+        .runEffect(UserIter.ioNt)
+        .into[Fx.fx1[IO]]
+        .unsafeRunSync
+    // .detach
+    //
+    //  .run
+    //     .run
   }
 
   def runProgram = {
@@ -59,5 +65,6 @@ object MyApp extends App {
       .runEffect(UserIter.ioNt)
       .unsafeRunSync
   }
-  runProgram
+
+  testProgram
 }
