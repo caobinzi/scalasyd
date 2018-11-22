@@ -43,15 +43,11 @@ object MyApp extends App {
       program[Stack]
         .runEffect(LogIter.evalNt)
         .runEffect(ConsoleIter.evalNt)
-        .runEval
         .runEffect(GdprIter.ioNt)
         .runEffect(UserIter.ioNt)
-        .into[Fx.fx1[IO]]
+        .into[Fx.fx2[Eval, IO]] //This one is necessary
+        .runEval
         .unsafeRunSync
-    // .detach
-    //
-    //  .run
-    //     .run
   }
 
   def runProgram = {
